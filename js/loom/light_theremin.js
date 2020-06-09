@@ -40,7 +40,7 @@ lightMain.prototype = {
 		
 		startGUI();
 		
-		//getLightReading();
+		getLightReading();
     }
 };
 
