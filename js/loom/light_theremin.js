@@ -11,6 +11,11 @@ var lightMain = function(game){
 		'00ffa8','00ffd0','00fff4','00e4ff','00d4ff','00c4ff','00b4ff','00a4ff','0094ff','0084ff','0074ff',
 		'0064ff','0054ff','0044ff','0032ff','0022ff','0012ff','0002ff','0000ff','0100ff','0200ff','0300ff',
 	];
+	
+	config = {
+		SENSITIVITY: 2.5,
+		
+	};
 };
 
 lightMain.prototype = {
@@ -18,7 +23,13 @@ lightMain.prototype = {
 		fxVibes = game.add.audioSprite('light_vibes');
     	fxVibes.allowMultiple = true;
     	
-    	debugText = game.add.text(20, 20, 'light: ' + 0, {font: '42px', fill: 'white'});
+    	debugText = game.add.text(0, 0, '0', {font: '36px', fill: 'white'});
+    	debugText.x = game.world.centerX - debugText.width / 2;
+    	debugText.y = game.world.centerY - debugText.height / 2;
+    	
+    	lightSprite = game.add.sprite(0, 0, 'white');
+    	lightSprite.x = game.world.centerX - lightSprite.width / 2;
+    	lightSprite.y = game.world.centerY - lightSprite.height / 2;
 
         try{
         	window.plugins.insomnia.keepAwake();
@@ -26,8 +37,10 @@ lightMain.prototype = {
         try{
             StatusBar.hide();
         } catch(e){}   
-
-		getLightReading();
+		
+		startGUI();
+		
+		//getLightReading();
     }
 };
 
@@ -42,13 +55,15 @@ function getLightReading(){
 function readLight(reading){
     luminosity = parseInt(reading.intensity);
     
-    debugText.text = 'light: ' + luminosity;
+    debugText.text = luminosity;
     
-    var place = Math.round(luminosity / 50);
+    var place = Math.round(luminosity * config.SENSITIVITY / 50);
     if (place > colors.length - 1) place = colors.length - 1;
     game.stage.backgroundColor = '#' + colors[place];
+    
+    lightSprite.scale.set(place / 15, place / 15);
 
-    var noteNLight = Math.round( ( (luminosity * 1.25) + 300) / 300 );
+    var noteNLight = Math.round( ( (luminosity * 1.25) + (300 * config.SENSITIVITY)) / 300 );
     if (noteNLight > 16) noteNLight = 16;
     else if (noteNLight < 1) noteNLight = 1;
 	
@@ -61,6 +76,19 @@ function readLight(reading){
 			anims[noteNLight - 1].play(10, false);
 		}catch(e){}		
 	}
+
 	
 	oldNoteLight = noteNLight;
+}
+
+function startGUI(){
+    var gui = new dat.GUI({ width: 300 });
+    gui.add(config, 'SENSITIVITY', 1.0, 10.0).name('sensitivity');
+    
+    /*gui.add(config, 'DYE_RESOLUTION', { 'high': 1024, 'medium': 512, 'low': 256, 'very low': 128 }).name('quality').onFinishChange(initFramebuffers);
+    gui.add(config, 'SIM_RESOLUTION', { '32': 32, '64': 64, '128': 128, '256': 256 }).name('sim resolution').onFinishChange(initFramebuffers);
+    gui.add(config, 'DENSITY_DISSIPATION', 0, 4.0).name('density diffusion');
+    gui.add(config, 'PRESSURE', 0.0, 1.0).name('pressure');
+    gui.add(config, 'CURL', 0, 50).name('vorticity').step(1);
+    gui.add(config, 'SPLAT_RADIUS', 0.01, 1.0).name('splat radius');*/
 }
