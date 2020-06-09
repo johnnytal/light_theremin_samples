@@ -9,14 +9,12 @@ lightMain.prototype = {
     create: function(){
     	loadLightSounds();
     	
-    	debugText = game.add.text(20, 20, '', {font: '42px', fill: 'yellow'});
-    	
-    	game.stage.backgroundColor = '#f7f7f7';
-    
-        distaff = this.add.sprite(0, 0, keys[3]);
+    	debugText = game.add.text(20, 20, 'light: ' + 0, {font: '42px', fill: 'yellow'});
+
+        distaff = this.add.sprite(0, 0, keys[7]);
         distaff.x = game.world.centerX - distaff.width / 2;
         distaff.y = game.world.centerY - distaff.height / 2;
-        distaff.alpha = 0;
+        distaff.alpha = 0.3;
 	
         try{
         	window.plugins.insomnia.keepAwake();
@@ -26,7 +24,7 @@ lightMain.prototype = {
             StatusBar.hide();
         } catch(e){}   
 
-		getLightReading();
+		//getLightReading();
     }
 };
 
@@ -63,9 +61,9 @@ function readLight(reading){
     	distaff.loadTexture(keys[Math.round(noteNLight / 2 - 1)], 0);
     } catch(e){}
     
-	tween = game.add.tween(distaff).to( { alpha: 1 }, 1500, "Linear", true);
+	var tween = game.add.tween(distaff).to( { alpha: 1 }, 1500, "Linear", true);
 	tween.onComplete.add(onComplete, function(){
-		game.add.tween(distaff).to( { alpha: 0}, 1500, "Linear", true);
+		game.add.tween(distaff).to( { alpha: 0.3}, 1500, "Linear", true);
 	});
 }
 
