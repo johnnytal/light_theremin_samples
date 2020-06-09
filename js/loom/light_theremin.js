@@ -24,7 +24,7 @@ lightMain.prototype = {
             StatusBar.hide();
         } catch(e){}   
 
-		//getLightReading();
+		getLightReading();
     }
 };
 
