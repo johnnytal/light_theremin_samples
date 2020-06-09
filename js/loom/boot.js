@@ -32,13 +32,15 @@ function start(){
     game.state.add("Preloader", preloader);
     game.state.add("Light", lightMain);
 
-    game.state.start("Boot");  
+    game.state.start("Boot");
 }
 
 var boot = function(game){};
   
 boot.prototype = {
     create: function(){
+    	game.stage.backgroundColor = '#000000';
+    	
         game.state.start("Preloader"); 
     }
 };

@@ -9,6 +9,8 @@ lightMain.prototype = {
     create: function(){
     	loadLightSounds();
     	
+    	debugText = game.add.text(20, 20, '', {font: '42px', fill: 'yellow'});
+    	
     	game.stage.backgroundColor = '#f7f7f7';
     
         distaff = this.add.sprite(0, 0, keys[3]);
@@ -38,6 +40,8 @@ function getLightReading(){
 
 function readLight(reading){
     luminosity = parseInt(reading.intensity);
+    
+    debugText.text = 'light: ' + luminosity;
 
     noteNLight = Math.round( ( (luminosity * 1.25) + 300) / 300 );
     if (noteNLight > 16) noteNLight = 16;
@@ -56,7 +60,7 @@ function readLight(reading){
 	oldNoteLight = noteNLight;
 	
 	try{
-    	distaff.loadTexture(keys[noteNLight / 2 - 1], 0);
+    	distaff.loadTexture(keys[Math.round(noteNLight / 2 - 1)], 0);
     } catch(e){}
     
 	tween = game.add.tween(distaff).to( { alpha: 1 }, 1500, "Linear", true);
