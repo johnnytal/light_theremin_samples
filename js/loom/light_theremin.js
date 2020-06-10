@@ -13,14 +13,25 @@ var lightMain = function(game){
 	];
 	
 	config = {
-		SENSITIVITY: 2.5,
-		SOUND: 0
+		SENSITIVITY: 5,
+		SOUND: 0,
+		SCALE: 0
 	};
+	
+	chromatic = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
+	major = [1, 3, 5, 6, 8, 10, 12, 13, 15, 17, 18, 20, 22];
+	minor = [1, 3, 4, 6, 8, 9, 11, 13, 15, 16, 18, 20, 21, 23];
+	pentatonic = [1, 3, 6, 8, 10, 13, 15, 18, 20, 22];
+	blues = [1, 4, 6, 7, 8, 11, 13, 16, 18, 19, 20, 23];	
+	
+	scales = [chromatic, major, minor, pentatonic, blues];
 };
 
 lightMain.prototype = {
     create: function(){
 		loadSounds();
+		
+		playingScale = scales[config.SCALE];
 		
     	debugText = game.add.text(0, 0, '0', {font: '36px', fill: 'white'});
     	debugText.x = game.world.centerX - debugText.width / 2;
@@ -64,12 +75,17 @@ function readLight(reading){
     lightSprite.scale.set(place / 17, place / 17);
 
     var noteNLight = Math.round( ( (luminosity * 1.25) + (300 * config.SENSITIVITY)) / 300 );
-    if (noteNLight > 23) noteNLight = 23;
-    else if (noteNLight < 1) noteNLight = 1;
+    
+    if (noteNLight > playingScale.length){
+    	noteNLight = playingScale.length;
+    } 
+    else if (noteNLight < 1){
+    	noteNLight = 1;	
+    }
 	
 	if (noteNLight != oldNoteLight){
 		try{
-			sounds[config.SOUND].play(noteNLight);
+			sounds[config.SOUND].play(playingScale[noteNLight]);
 		}catch(e){}	
 	}
 	
@@ -78,19 +94,11 @@ function readLight(reading){
 
 function startGUI(){
     var gui = new dat.GUI({ width: 300 });
-    gui.add(config, 'SENSITIVITY', 1.0, 10.0).name('sensitivity');
-    gui.add(config, 'SOUND', { 'Vibraphone': 0, 'Glockenspiel': 1, 'Harp': 2, 'Kalimba': 3 , 'Pizzicato' : 4 }).name('instrument');
-    
-	/*gui.add(config, 'DYE_RESOLUTION', { 'high': 1024, 'medium': 512, 'low': 256, 'very low': 128 }).name('quality').onFinishChange(initFramebuffers);
-    gui.add(config, 'SIM_RESOLUTION', { '32': 32, '64': 64, '128': 128, '256': 256 }).name('sim resolution').onFinishChange(initFramebuffers);
-    gui.add(config, 'DENSITY_DISSIPATION', 0, 4.0).name('density diffusion');
-    gui.add(config, 'PRESSURE', 0.0, 1.0).name('pressure');
-    gui.add(config, 'CURL', 0, 50).name('vorticity').step(1);
-    gui.add(config, 'SPLAT_RADIUS', 0.01, 1.0).name('splat radius');*/
+    gui.add(config, 'SENSITIVITY', 1.0, 10.0).name('Sensitivity');
+    gui.add(config, 'SOUND', { 'Vibraphone': 0, 'Glockenspiel': 1, 'Harp': 2, 'Kalimba': 3 , 'Pizzicato' : 4 }).name('Instrument');
+    gui.add(config, 'SCALE', { 'Chromatic' : 0, 'Major': 1, 'Minor': 2, 'Pentatonic': 3, 'Blues': 4}).name('Scale');
     
     if (isMobile()) gui.close();
-    
-
 }
 
 function isMobile () {
@@ -107,11 +115,11 @@ function loadSounds(){
 	fxHarp = game.add.audioSprite('light_harp');
 	fxHarp.allowMultiple = true;
 	
-	fxKalimba = game.add.audioSprite('light_kalimba');
-	fxKalimba.allowMultiple = true;
+	fxPan = game.add.audioSprite('light_pan');
+	fxPan.allowMultiple = true;
 	
 	fxPizz = game.add.audioSprite('light_pizz');
 	fxPizz.allowMultiple = true; 	
 	
-	sounds = [fxVibes, fxGlock, fxHarp, fxKalimba, fxPizz];
+	sounds = [fxVibes, fxGlock, fxHarp, fxPan, fxPizz];
 }

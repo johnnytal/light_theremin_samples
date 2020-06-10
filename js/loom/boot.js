@@ -2,8 +2,8 @@
 document.addEventListener("deviceready", start, false);
 
 function start(){
-    WIDTH = 1332; 
-    HEIGHT = 738; 
+    WIDTH = 850; 
+    HEIGHT = 1100; 
 
     game = new Phaser.Game(WIDTH, HEIGHT, Phaser.CANVAS, "container");   
     
@@ -139,7 +139,7 @@ function getJson(){
     	}
 	};
 	
-	audioKalimba = {
+	audioPan = {
 	 	spritemap: {
 		    1 : { start: 0, end: 5, loop: false },
 	        2 : { start: 5, end: 10, loop: false },
