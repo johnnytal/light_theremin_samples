@@ -16,7 +16,7 @@ var lightMain = function(game){
 	
 	config = {
 		SENSITIVITY: 25,
-		FACTOR: 6,
+		FACTOR: 5,
 		SOUND: 0,
 		SCALE: 0
 	};
