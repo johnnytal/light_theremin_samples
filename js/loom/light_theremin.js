@@ -29,11 +29,11 @@ var lightMain = function(game){
 	
 	scales = [chromatic, major, minor, pentatonic, blues];
 	
-	scaleNotes = {
+	/*scaleNotes = {
 		1:'C', 2:'C#', 3: 'D', 4: 'D#', 5: 'E', 6: 'F', 7: 'F#', 8: 'G', 9: 'G#', 10: 'A', 11: 'A#', 12: 'B',
 		13:'C', 14:'C#', 15: 'D', 16: 'D#', 17: 'E', 18: 'F', 19: 'F#', 20: 'G', 21: 'G#', 22: 'A', 23: 'A#', 24: 'B',
 		25:'C'
-	};
+	};*/
 };
 
 lightMain.prototype = {
@@ -45,10 +45,10 @@ lightMain.prototype = {
     	debugText.x = game.world.centerX;
     	debugText.y = game.world.centerY - 20;
     	
-    	debugNote = game.add.text(0, 0, 'A#', {font: '36px', fill: 'white'});
+    	/*debugNote = game.add.text(0, 0, 'A#', {font: '36px', fill: 'white'});
     	debugNote.anchor.set(.5, .5);
     	debugNote.x = game.world.centerX;
-    	debugNote.y = game.world.centerY + 30;
+    	debugNote.y = game.world.centerY + 30;*/
 
     	lightSprite = game.add.sprite(0, 0, 'white');
     	lightSprite.anchor.set(.5, .5);
@@ -96,7 +96,7 @@ function readLight(reading){
 		
 		try{
 			sounds[config.SOUND].play(scales[config.SCALE][note]);
-			debugNote.text = scaleNotes.scales[config.SCALE][note];
+			//debugNote.text = scaleNotes.scales[config.SCALE][note];
 		}catch(e){}	 
   
 	    var place = Math.round(frequency_check / 60);
