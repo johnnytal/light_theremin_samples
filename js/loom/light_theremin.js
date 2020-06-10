@@ -70,14 +70,11 @@ lightMain.prototype = {
 };
 
 function watchReading(){
-    window.plugin.lightsensor.watchReadings(
-		function success(reading){
-	        readLight(reading);
-	    }, 
-	    function error(message){
-	    	debug_label.text = 'error ' + message;
-	    }
-    );
+    timer = setInterval(function(){
+        window.plugin.lightsensor.getReading(function success(reading){
+            readLight(reading);
+        });
+    }, 50);
 }
 
 function readLight(reading){
