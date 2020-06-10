@@ -1,5 +1,6 @@
 var lightMain = function(game){
-	note = 1;
+	note = 9;
+	last_frequency = -100;
 
 	colors = [
 		'FF0EF0','FF0EF0','FF0CF0','FF0BF0','FF0AF0','FF09F0','FF08F0','FF07F0','FF06F0','FF05F0','FF04F0',
@@ -69,7 +70,7 @@ function readLight(reading){
     
     frequency_check = luminosity * config.FACTOR;
     
-    debugText.text = frequency_check;
+    debugText.text = Math.round(frequency_check);
 
     if (Math.abs(frequency_check - last_frequency) > config.SENSITIVITY){	
         if (frequency_check < last_frequency){
