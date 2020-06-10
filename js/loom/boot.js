@@ -20,12 +20,27 @@ var boot = function(game){};
   
 boot.prototype = {
     create: function(){
-    	game.stage.backgroundColor = '#000000';
-    	
-        game.state.start("Preloader"); 
+        game.stage.backgroundColor = '#000';
+
+        if (this.game.device.desktop){
+            this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+            
+            this.scale.maxWidth = WIDTH; 
+            this.scale.maxHeight = HEIGHT; 
+        } 
+        
+        else {
+            this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+
+            this.scale.maxWidth = window.innerWidth * window.devicePixelRatio;
+            this.scale.maxHeight = window.innerHeight * window.devicePixelRatio;
+            
+            this.scale.forceOrientation(true, false);
+        }
+
+        game.state.start('Preloader');
     }
 };
-
 function getJson(){
 	audioGlock = {
 	 	spritemap: {
@@ -52,6 +67,8 @@ function getJson(){
 	    	21 : { start: 100, end: 105, loop: false },
 	    	22 : { start: 105, end: 110, loop: false },
 	    	23 : { start: 110, end: 115, loop: false },
+	    	24 : { start: 115, end: 120, loop: false },
+	    	25 : { start: 120, end: 125, loop: false }
     	}
 	};
 	
@@ -80,6 +97,8 @@ function getJson(){
 	    	21 : { start: 100, end: 105, loop: false },
 	    	22 : { start: 105, end: 110, loop: false },
 	    	23 : { start: 110, end: 115, loop: false },
+	    	24 : { start: 115, end: 120, loop: false },
+	    	25 : { start: 120, end: 125, loop: false }
     	}
 	};
 	
@@ -107,7 +126,9 @@ function getJson(){
 	    	20 : { start: 95, end: 100, loop: false },
 	    	21 : { start: 100, end: 105, loop: false },
 	    	22 : { start: 105, end: 110, loop: false },
-	    	23 : { start: 110, end: 115, loop: false }
+	    	23 : { start: 110, end: 115, loop: false },
+	    	24 : { start: 115, end: 120, loop: false },
+	    	25 : { start: 120, end: 125, loop: false }
     	}
 	};
 	
@@ -135,7 +156,9 @@ function getJson(){
 	    	20 : { start: 95, end: 100, loop: false },
 	    	21 : { start: 100, end: 105, loop: false },
 	    	22 : { start: 105, end: 110, loop: false },
-	    	23 : { start: 110, end: 115, loop: false }
+	    	23 : { start: 110, end: 115, loop: false },
+	    	24 : { start: 115, end: 120, loop: false },
+	    	25 : { start: 120, end: 125, loop: false }
     	}
 	};
 	
@@ -163,7 +186,9 @@ function getJson(){
 	    	20 : { start: 95, end: 100, loop: false },
 	    	21 : { start: 100, end: 105, loop: false },
 	    	22 : { start: 105, end: 110, loop: false },
-	    	23 : { start: 110, end: 115, loop: false }
+	    	23 : { start: 110, end: 115, loop: false },
+	    	24 : { start: 115, end: 120, loop: false },
+	    	25 : { start: 120, end: 125, loop: false }
     	}
 	};
 }

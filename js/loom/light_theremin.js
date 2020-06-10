@@ -1,6 +1,6 @@
 var lightMain = function(game){
-	noteNLight = 1;
-	oldNoteLight = -1;
+	note = 1;
+
 	colors = [
 		'FF0EF0','FF0EF0','FF0CF0','FF0BF0','FF0AF0','FF09F0','FF08F0','FF07F0','FF06F0','FF05F0','FF04F0',
 		'FF03F0','FF02F0','FF01F0','FF00F0','FF00E0','FF00D0','FF00C0','FF00B0','FF00A0','FF0090','FF0080',
@@ -13,16 +13,17 @@ var lightMain = function(game){
 	];
 	
 	config = {
-		SENSITIVITY: 5,
+		SENSITIVITY: 25,
+		FACTOR: 3,
 		SOUND: 0,
-		SCALE: 0
+		SCALE: 0,
 	};
 	
-	chromatic = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
-	major = [1, 3, 5, 6, 8, 10, 12, 13, 15, 17, 18, 20, 22];
-	minor = [1, 3, 4, 6, 8, 9, 11, 13, 15, 16, 18, 20, 21, 23];
-	pentatonic = [1, 3, 6, 8, 10, 13, 15, 18, 20, 22];
-	blues = [1, 4, 6, 7, 8, 11, 13, 16, 18, 19, 20, 23];	
+	chromatic = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25];
+	major = [1, 3, 5, 6, 8, 10, 12, 13, 15, 17, 18, 20, 22, 24, 25];
+	minor = [1, 3, 4, 6, 8, 9, 11, 13, 15, 16, 18, 20, 21, 23, 25];
+	pentatonic = [1, 3, 6, 8, 10, 13, 15, 18, 20, 22, 25];
+	blues = [1, 4, 6, 7, 8, 11, 13, 16, 18, 19, 20, 23, 25];	
 	
 	scales = [chromatic, major, minor, pentatonic, blues];
 };
@@ -66,35 +67,38 @@ function getLightReading(){
 function readLight(reading){
     luminosity = parseInt(reading.intensity);
     
-    debugText.text = luminosity;
+    frequency_check = luminosity * config.FACTOR;
     
-    var place = Math.round(luminosity * config.SENSITIVITY / 50);
-    if (place > colors.length - 1) place = colors.length - 1;
-    game.stage.backgroundColor = '#' + colors[place];
-    
-    lightSprite.scale.set(place / 17, place / 17);
+    debugText.text = frequency_check;
 
-    var noteNLight = Math.round( ( (luminosity * 1.25) + (300 * config.SENSITIVITY)) / 300 );
-    
-    if (noteNLight > playingScale.length){
-    	noteNLight = playingScale.length;
-    } 
-    else if (noteNLight < 1){
-    	noteNLight = 1;	
-    }
-	
-	if (noteNLight != oldNoteLight){
+    if (Math.abs(frequency_check - last_frequency) > config.SENSITIVITY){	
+        if (frequency_check < last_frequency){
+            note--; 
+            if (note < 1) note = 1;
+        }
+        else if (frequency_check > last_frequency){
+            note++;
+            if (note > playingScale.length) note = playingScale.length;
+        }
+		
 		try{
 			sounds[config.SOUND].play(playingScale[noteNLight]);
-		}catch(e){}	
-	}
-	
-	oldNoteLight = noteNLight;
+		}catch(e){}	 
+		    
+	    var place = Math.round(frequency_check / 50);
+	    if (place > colors.length - 1) place = colors.length - 1;
+	    game.stage.backgroundColor = '#' + colors[place];
+	    
+	    lightSprite.scale.set(place / 17, place / 17);
+    }
+    
+    last_frequency = frequency_check;
 }
 
 function startGUI(){
     var gui = new dat.GUI({ width: 300 });
-    gui.add(config, 'SENSITIVITY', 1.0, 10.0).name('Sensitivity');
+    gui.add(config, 'SENSITIVITY', 1, 100).name('Sensitivity').step(1);
+    gui.add(config, 'FACTOR', 0.1, 10).name('Darkness level');
     gui.add(config, 'SOUND', { 'Vibraphone': 0, 'Glockenspiel': 1, 'Harp': 2, 'Kalimba': 3 , 'Pizzicato' : 4 }).name('Instrument');
     gui.add(config, 'SCALE', { 'Chromatic' : 0, 'Major': 1, 'Minor': 2, 'Pentatonic': 3, 'Blues': 4}).name('Scale');
     
