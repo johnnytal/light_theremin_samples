@@ -1,5 +1,6 @@
 var lightMain = function(game){
 	note = 9;
+	frequency_check = 0;
 	last_frequency = -100;
 
 	colors = [
@@ -14,8 +15,8 @@ var lightMain = function(game){
 	];
 	
 	config = {
-		SENSITIVITY: 25,
-		FACTOR: 5,
+		SENSITIVITY: 75,
+		FACTOR: 3,
 		SOUND: 0,
 		SCALE: 0,
 	};
@@ -64,12 +65,13 @@ lightMain.prototype = {
         } catch(e){}   
 		
 		startGUI();
-		watchReading();
+		getLightReading();
+		
 		initAd();
     }
 };
 
-function watchReading(){
+function getLightReading(){
     setInterval(function(){
         window.plugin.lightsensor.getReading(function success(reading){
             readLight(reading);
@@ -80,9 +82,9 @@ function watchReading(){
 function readLight(reading){
     luminosity = parseInt(reading.intensity);
     
-    frequency_check = luminosity * config.FACTOR;
+    frequency_check = Math.round(luminosity * config.FACTOR);
     
-    debugText.text = Math.round(frequency_check);
+    debugText.text = frequency_check;
 
     if (Math.abs(frequency_check - last_frequency) > config.SENSITIVITY){	
         if (frequency_check < last_frequency){
@@ -98,21 +100,23 @@ function readLight(reading){
 			sounds[config.SOUND].play(playingScale[note]);
 		}catch(e){}	 
 		
-		debugNote.text = scaleNotes.playingScale[note];
+		try{
+			debugNote.text = scaleNotes.playingScale[note];
+		}catch(e){}	 
 		    
-	    var place = Math.round(frequency_check / 75);
+	    var place = Math.round(frequency_check / 60);
 	    if (place > colors.length - 1) place = colors.length - 1;
 	    game.stage.backgroundColor = '#' + colors[place];
 	    
-	    lightSprite.scale.set(place / 20, place / 20);
+	    lightSprite.scale.set(place / 18, place / 18);
     }
     
     last_frequency = frequency_check;
 }
 
 function startGUI(){
-    var gui = new dat.GUI({ width: 300 });
-    gui.add(config, 'SENSITIVITY', 0, 500).name('Sensitivity').step(5);
+    var gui = new dat.GUI({ width: 400 });
+    gui.add(config, 'SENSITIVITY', 0, 500).name('Sensitivity').step(1);
     gui.add(config, 'FACTOR', 0.1, 10).name('Darkness level');
     gui.add(config, 'SOUND', { 'Vibraphone': 0, 'Glockenspiel': 1, 'Harp': 2, 'Kalimba': 3 , 'Pizzicato' : 4 }).name('Instrument');
     gui.add(config, 'SCALE', { 'Chromatic' : 0, 'Major': 1, 'Minor': 2, 'Pentatonic': 3, 'Blues': 4}).name('Scale');
@@ -144,13 +148,15 @@ function loadSounds(){
 }
 
 function initAd(){
-    admobid = {
-        banner: 'ca-app-pub-9795366520625065/8985428338'
-    };
-    
- 	if(AdMob) AdMob.createBanner({
-  	  	adId: admobid.banner,
-  	  	position: AdMob.AD_POSITION.BOTTOM_CENTER,
-  	  	autoShow: true
-  	});
+	try{
+	    admobid = {
+	        banner: 'ca-app-pub-9795366520625065/8985428338'
+	    };
+	    
+	 	if(AdMob) AdMob.createBanner({
+	  	  	adId: admobid.banner,
+	  	  	position: AdMob.AD_POSITION.BOTTOM_CENTER,
+	  	  	autoShow: true
+	  	});
+	} catch(e){}
 }
