@@ -14,8 +14,8 @@ var lightMain = function(game){
 	];
 	
 	config = {
-		SENSITIVITY: 25,
-		FACTOR: 3,
+		SENSITIVITY: 100,
+		FACTOR: 4,
 		SOUND: 0,
 		SCALE: 0,
 	};
@@ -83,14 +83,14 @@ function readLight(reading){
         }
 		
 		try{
-			sounds[config.SOUND].play(playingScale[noteNLight]);
+			sounds[config.SOUND].play(playingScale[note]);
 		}catch(e){}	 
 		    
-	    var place = Math.round(frequency_check / 50);
+	    var place = Math.round(frequency_check / 75);
 	    if (place > colors.length - 1) place = colors.length - 1;
 	    game.stage.backgroundColor = '#' + colors[place];
 	    
-	    lightSprite.scale.set(place / 17, place / 17);
+	    lightSprite.scale.set(place / 20, place / 20);
     }
     
     last_frequency = frequency_check;
@@ -98,7 +98,7 @@ function readLight(reading){
 
 function startGUI(){
     var gui = new dat.GUI({ width: 300 });
-    gui.add(config, 'SENSITIVITY', 1, 100).name('Sensitivity').step(1);
+    gui.add(config, 'SENSITIVITY', 0, 600).name('Sensitivity').step(5);
     gui.add(config, 'FACTOR', 0.1, 10).name('Darkness level');
     gui.add(config, 'SOUND', { 'Vibraphone': 0, 'Glockenspiel': 1, 'Harp': 2, 'Kalimba': 3 , 'Pizzicato' : 4 }).name('Instrument');
     gui.add(config, 'SCALE', { 'Chromatic' : 0, 'Major': 1, 'Minor': 2, 'Pentatonic': 3, 'Blues': 4}).name('Scale');
