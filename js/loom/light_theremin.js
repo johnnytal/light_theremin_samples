@@ -15,9 +15,9 @@ var lightMain = function(game){
 	
 	config = {
 		SENSITIVITY: 25,
-		FACTOR: 6,
+		FACTOR: 5,
 		SOUND: 0,
-		SCALE: 1,
+		SCALE: 0,
 	};
 	
 	chromatic = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25];
@@ -33,14 +33,14 @@ var lightMain = function(game){
 		13:'C', 14:'C#', 15: 'D', 16: 'D#', 17: 'E', 18: 'F', 19: 'F#', 20: 'G', 21: 'G#', 22: 'A', 23: 'A#', 24: 'B',
 		25:'C'
 	};
+	
+	playingScale = scales[config.SCALE];
 };
 
 lightMain.prototype = {
     create: function(){
 		loadSounds();
-		
-		playingScale = scales[config.SCALE];
-		
+
     	debugText = game.add.text(0, 0, '000', {font: '36px', fill: 'white'});
     	debugText.anchor.set(.5, .5);
     	debugText.x = game.world.centerX;
@@ -70,7 +70,7 @@ lightMain.prototype = {
 };
 
 function watchReading(){
-    timer = setInterval(function(){
+    setInterval(function(){
         window.plugin.lightsensor.getReading(function success(reading){
             readLight(reading);
         });

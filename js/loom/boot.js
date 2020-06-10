@@ -1,5 +1,8 @@
-//window.onload = start;
 document.addEventListener("deviceready", start, false);
+document.addEventListener("pause", onPause, false);
+document.addEventListener("resume", onResume, false);
+
+//window.onload = start;
 
 function start(){
     WIDTH = 850; 
@@ -191,4 +194,17 @@ function getJson(){
 	    	25 : { start: 120, end: 125, loop: false }
     	}
 	};
+}
+
+function onPause(){
+    game.paused = true;
+}
+
+function onResume(){
+    game.paused = false;
+    setTimeout(function(){
+        try{
+            StatusBar.hide();
+        }catch(e){}   
+    }, 1000);
 }
